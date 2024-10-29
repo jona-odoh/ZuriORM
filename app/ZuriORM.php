@@ -47,5 +47,19 @@ class ZuriORM
         return self::$connection ? 'Connected' : 'Disconnected';
     }
 
+    public function insert(array $data)
+    {
+        $fields = implode(', ', array_keys($data));
+        $placeholders = ':' . implode(', :', array_keys($data));
+        $sql = "INSERT INTO {$this->table} ({$fields}) VALUES ({$placeholders})";
+
+        $statement = self::$connection->prepare($sql);
+        foreach ($data as $key => $value) {
+            $statement->bindValue(":$key", $value);
+        }
+
+        return $statement->execute();
+    }
+
 
 }
