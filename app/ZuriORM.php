@@ -94,6 +94,20 @@ class ZuriORM
 
         return $statement->execute();
     }
+    public function where(string $column, string $operator, $value)
+    {
+        $this->wheres[] = "{$column} {$operator} :{$column}";
+        $this->bindings[$column] = $value;
+        return $this;
+    }
+
+    public function orWhere(string $column, string $operator, $value)
+    {
+        $this->wheres[] = "OR {$column} {$operator} :{$column}";
+        $this->bindings[$column] = $value;
+        return $this;
+    }
+
 
 
 
