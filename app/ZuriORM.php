@@ -108,6 +108,25 @@ class ZuriORM
         return $this;
     }
 
+    public function orderBy(string $column, string $direction = 'ASC')
+    {
+        $this->order = "ORDER BY {$column} {$direction}";
+        return $this;
+    }
+
+    public function groupBy(string $column)
+    {
+        $this->groupBy = "GROUP BY {$column}";
+        return $this;
+    }
+
+    public function having(string $column, string $operator, $value)
+    {
+        $this->having = "HAVING {$column} {$operator} :havingValue";
+        $this->bindings['havingValue'] = $value;
+        return $this;
+    }
+
 
 
 
