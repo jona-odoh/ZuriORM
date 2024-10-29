@@ -65,6 +65,25 @@ class ZuriORM
         $this->selects = implode(', ', $columns);
         return $this;
     }
+    public function update(array $data)
+    {
+        $fields = '';
+        foreach ($data as $key => $value) {
+            $fields .= "{$key} = :{$key}, ";
+            $this->bindings[$key] = $value;
+        }
+        $fields = rtrim($fields, ', ');
+
+        $sql = "UPDATE {$this->table} SET {$fields} {$this->getWhereClause()}";
+        $stmt = self::$connection->prepare($sql);
+
+        foreach ($this->bindings as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        return $stmt->execute();
+    }
+
 
 
 
