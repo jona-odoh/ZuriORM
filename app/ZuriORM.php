@@ -83,6 +83,18 @@ class ZuriORM
 
         return $statement->execute();
     }
+    public function delete()
+    {
+        $sql = "DELETE FROM {$this->table} {$this->getWhereClause()}";
+        $statement = self::$connection->prepare($sql);
+
+        foreach ($this->bindings as $key => $value) {
+            $statement->bindValue(":$key", $value);
+        }
+
+        return $statement->execute();
+    }
+
 
 
 
