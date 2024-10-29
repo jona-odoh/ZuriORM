@@ -60,6 +60,12 @@ class ZuriORM
 
         return $statement->execute();
     }
+    public function select(...$columns)
+    {
+        $this->selects = implode(', ', $columns);
+        return $this;
+    }
+
 
 
 }
