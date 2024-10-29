@@ -75,13 +75,13 @@ class ZuriORM
         $fields = rtrim($fields, ', ');
 
         $sql = "UPDATE {$this->table} SET {$fields} {$this->getWhereClause()}";
-        $stmt = self::$connection->prepare($sql);
+        $statement = self::$connection->prepare($sql);
 
         foreach ($this->bindings as $key => $value) {
-            $stmt->bindValue(":$key", $value);
+            $statement->bindValue(":$key", $value);
         }
 
-        return $stmt->execute();
+        return $statement->execute();
     }
 
 
