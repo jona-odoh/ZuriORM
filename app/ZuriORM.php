@@ -4,11 +4,12 @@ namespace App;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
 class ZuriORM
 {
-    private static $connection;
-    private $statement;
+    private static ?PDO $connection = null;
+    private ?PDOStatement $statement = null;
 
 
     public function __construct($host, $dbname, $username, $password)
@@ -16,7 +17,13 @@ class ZuriORM
         $this->connect($host, $dbname, $username, $password);
     }
 
-    public function connect($host, $dbname, $username, $password)
+    public function connect(
+        string $host,
+        string $dbname,
+        string $username,
+        string $password
+    ): void
+
     {
         try {
             self::$connection = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -26,18 +33,18 @@ class ZuriORM
         }
     }
 
-    public function closeConnection()
+    public function closeConnection(): void
     {
         self::$connection = null;
     }
 
-    public function getConnectionStatus()
+    public function getConnectionStatus(): string
     {
         return self::$connection ? "Connected" : "Not connected";
     }
 
-   
-    public function create($table, array $data)
+
+    public function create(string $table, array $data): int
     {
         $columns = implode(',', array_keys($data));
         $placeholders = implode(',', array_map(fn($v) => ":$v", array_keys($data)));
@@ -46,7 +53,7 @@ class ZuriORM
         $statement->execute($data);
         return self::$connection->lastInsertId();
     }
-    public function read($table, $conditions = [])
+    public function read(string $table, array $conditions = []): array
     {
         $where = $this->buildWhereClause($conditions);
         $sql = "SELECT * FROM $table $where";
@@ -57,7 +64,16 @@ class ZuriORM
 
     // On finish work here (Clause)
 
-    private function buildWhereClause($conditions)
+    private function buildWhereClause(array $conditions): string
     {
+        if (empty($conditions)) {
+            return '';
+        }
+
+        $clauses = [];
+        foreach ($conditions as $key => $value) {
+            $clauses[] = "$key = :$key";
+        }
+        return 'WHERE ' . implode(' AND ', $clauses);
     }
 }
