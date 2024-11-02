@@ -70,6 +70,19 @@ class ZuriORM
         $statement->execute(array_merge($data, $conditions));
         return $statement->rowCount();
     }
+    public function delete($table, $conditions)
+    {
+        $where = $this->buildWhereClause($conditions);
+        $sql = "DELETE FROM $table $where";
+        $statement = self::$connection->prepare($sql);
+        $statement->execute(array_values($conditions));
+        return $statement->rowCount();
+    }
+
+    private function buildWhereClause($conditions)
+    {
+        return $conditions ? "WHERE " . implode(' AND ', array_map(fn($k) => "$k = ?", array_keys($conditions))) : '';
+    }
 
     // On finish work here (Clause)
 
