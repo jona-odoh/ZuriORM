@@ -86,16 +86,4 @@ class ZuriORM
 
     // On finish work here (Clause)
 
-    private function buildWhereClause(array $conditions): string
-    {
-        if (empty($conditions)) {
-            return '';
-        }
-
-        $clauses = [];
-        foreach ($conditions as $key => $value) {
-            $clauses[] = "$key = :$key";
-        }
-        return 'WHERE ' . implode(' AND ', $clauses);
-    }
 }
