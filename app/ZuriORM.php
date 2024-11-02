@@ -61,6 +61,15 @@ class ZuriORM
         $statement->execute(array_values($conditions));
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function update($table, array $data, $conditions)
+    {
+        $set = implode(', ', array_map(fn($k) => "$k = :$k", array_keys($data)));
+        $where = $this->buildWhereClause($conditions);
+        $sql = "UPDATE $table SET $set $where";
+        $statement = self::$connection->prepare($sql);
+        $statement->execute(array_merge($data, $conditions));
+        return $statement->rowCount();
+    }
 
     // On finish work here (Clause)
 
