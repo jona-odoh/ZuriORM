@@ -10,6 +10,8 @@ class ZuriORM
 {
     private static ?PDO $connection = null;
     private ?PDOStatement $statement = null;
+    private $selects = '*';
+    private $joins = '';
 
 
     public function __construct($host, $dbname, $username, $password)
@@ -77,6 +79,11 @@ class ZuriORM
         $statement = self::$connection->prepare($sql);
         $statement->execute(array_values($conditions));
         return $statement->rowCount();
+    }
+    public function select($columns)
+    {
+        $this->selects = is_array($columns) ? implode(',', $columns) : $columns;
+        return $this;
     }
 
     private function buildWhereClause($conditions)
