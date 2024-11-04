@@ -10,6 +10,7 @@ class ZuriORM
 {
     private static ?PDO $connection = null;
     private ?PDOStatement $statement = null;
+    protected array $bindings = [];
     private $selects = '*';
     private $wheres = [];
     private $joins = '';
