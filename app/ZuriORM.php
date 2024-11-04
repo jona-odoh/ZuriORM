@@ -11,6 +11,7 @@ class ZuriORM
     private static ?PDO $connection = null;
     private ?PDOStatement $statement = null;
     private $selects = '*';
+    private $wheres = [];
     private $joins = '';
 
 
@@ -83,6 +84,12 @@ class ZuriORM
     public function select($columns)
     {
         $this->selects = is_array($columns) ? implode(',', $columns) : $columns;
+        return $this;
+    }
+    public function where($column, $operator, $value)
+    {
+        $this->wheres[] = "$column $operator ?";
+        $this->bindings[] = $value;
         return $this;
     }
 
