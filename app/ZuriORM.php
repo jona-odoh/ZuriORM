@@ -98,6 +98,12 @@ class ZuriORM
         $this->bindings[] = $value;
         return $this;
     }
+    public function orWhere($column, $operator, $value)
+    {
+        $this->wheres[] = "OR $column $operator ?";
+        $this->bindings[] = $value;
+        return $this;
+    }
 
     private function buildWhereClause($conditions)
     {

@@ -31,3 +31,5 @@ $deletedRows = $db->delete("users", ["id" => $id]);
 $results = $db->where('status', '=', 'active')
     ->andWhere('age', '>', 21);
 
+$results = $db->Where('status', '=', 'active')
+    ->orWhere('role', '=', 'admin');
