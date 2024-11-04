@@ -26,3 +26,7 @@ $updatedRows = $db->update("users", ["email" => "jonathanodoh3140@gmail.com"], [
 
 // Delete record
 $deletedRows = $db->delete("users", ["id" => $id]);
+
+// WHERE
+$results = $db->where('status', '=', 'active');
+
