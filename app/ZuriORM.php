@@ -92,6 +92,12 @@ class ZuriORM
         $this->bindings[] = $value;
         return $this;
     }
+    public function andWhere($column, $operator, $value)
+    {
+        $this->wheres[] = "AND $column $operator ?";
+        $this->bindings[] = $value;
+        return $this;
+    }
 
     private function buildWhereClause($conditions)
     {
