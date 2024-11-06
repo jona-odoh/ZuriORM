@@ -14,6 +14,7 @@ class ZuriORM
     private $selects = '*';
     private $wheres = [];
     private $orderBy = '';
+    private $groupBy = '';
     private $joins = '';
 
 
@@ -109,6 +110,11 @@ class ZuriORM
     public function orderBy($column, $direction = 'ASC')
     {
         $this->orderBy = "ORDER BY $column $direction";
+        return $this;
+    }
+    public function groupBy($column)
+    {
+        $this->groupBy = "GROUP BY $column";
         return $this;
     }
 
