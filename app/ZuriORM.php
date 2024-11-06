@@ -13,6 +13,7 @@ class ZuriORM
     protected array $bindings = [];
     private $selects = '*';
     private $wheres = [];
+    private $orderBy = '';
     private $joins = '';
 
 
@@ -103,6 +104,11 @@ class ZuriORM
     {
         $this->wheres[] = "OR $column $operator ?";
         $this->bindings[] = $value;
+        return $this;
+    }
+    public function orderBy($column, $direction = 'ASC')
+    {
+        $this->orderBy = "ORDER BY $column $direction";
         return $this;
     }
 
