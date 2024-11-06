@@ -33,3 +33,4 @@ $results = $db->where('status', '=', 'active')
 
 $results = $db->Where('status', '=', 'active')
     ->orWhere('role', '=', 'admin');
+
