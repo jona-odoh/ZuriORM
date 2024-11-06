@@ -12,6 +12,7 @@ class ZuriORM
     private ?PDOStatement $statement = null;
     protected array $bindings = [];
     private $selects = '*';
+    private $from;
     private $wheres = [];
     private $orderBy = '';
     private $groupBy = '';
@@ -124,5 +125,6 @@ class ZuriORM
     }
 
     // On finish work here (Clause)
+
 
 }
