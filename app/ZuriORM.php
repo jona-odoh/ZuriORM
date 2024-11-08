@@ -123,6 +123,11 @@ class ZuriORM
         $this->limit = "LIMIT $limit";
         return $this;
     }
+    public function offset($offset)
+    {
+        $this->offset = "OFFSET $offset";
+        return $this;
+    }
 
 
     private function buildWhereClause($conditions)
