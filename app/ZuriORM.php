@@ -118,6 +118,12 @@ class ZuriORM
         $this->groupBy = "GROUP BY $column";
         return $this;
     }
+    public function limit($limit)
+    {
+        $this->limit = "LIMIT $limit";
+        return $this;
+    }
+
 
     private function buildWhereClause($conditions)
     {
