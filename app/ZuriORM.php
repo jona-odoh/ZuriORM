@@ -128,6 +128,11 @@ class ZuriORM
         $this->offset = "OFFSET $offset";
         return $this;
     }
+    public function join($type, $table, $on)
+    {
+        $this->joins .= "$type JOIN $table ON $on ";
+        return $this;
+    }
 
 
     private function buildWhereClause($conditions)
