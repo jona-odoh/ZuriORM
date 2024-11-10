@@ -5,8 +5,7 @@
     "require": {
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
-        "ext-pdo_sqlite": "*",
-        "phpunit/phpunit": "10.*"
+        "ext-pdo_sqlite": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "10.*"
