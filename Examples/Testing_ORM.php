@@ -34,3 +34,10 @@ $results = $db->where('status', '=', 'active')
 $results = $db->Where('status', '=', 'active')
     ->orWhere('role', '=', 'admin');
 
+
+
+//$db = new ZuriORM("localhost", "database_name", "username", "password");
+
+// Aggregate functions
+$totalUsers = $db->table("users")->count();
+$averageAge = $db->table("users")->avg("age");
