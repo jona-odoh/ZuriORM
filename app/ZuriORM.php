@@ -158,6 +158,21 @@ class ZuriORM
     {
         return $this->aggregate("MAX($column)");
     }
+    public function min($column)
+    {
+        return $this->aggregate("MIN($column)");
+    }
+    private function aggregate($function)
+    {
+        $sql = "SELECT $function FROM {$this->table} {$this->joins} ";
+        if ($this->wheres) {
+            $sql .= 'WHERE ' . implode(' ', $this->wheres);
+        }
+        $statment = self::$connection->prepare($sql);
+        $statment->execute($this->bindings);
+        return $statment->fetchColumn();
+    }
+
 
 
 
