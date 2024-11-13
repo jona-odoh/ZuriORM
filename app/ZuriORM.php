@@ -142,5 +142,23 @@ class ZuriORM
 
     // On finish work here (Clause)
 
+    public function count($column = '*')
+    {
+        return $this->aggregate("COUNT($column)");
+    }
+    public function sum($column)
+    {
+        return $this->aggregate("SUM($column)");
+    }
+    public function avg($column)
+    {
+        return $this->aggregate("AVG($column)");
+    }
+    public function max($column)
+    {
+        return $this->aggregate("MAX($column)");
+    }
+
+
 
 }
