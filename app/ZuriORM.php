@@ -172,6 +172,20 @@ class ZuriORM
         $statment->execute($this->bindings);
         return $statment->fetchColumn();
     }
+    public function beginTransaction()
+    {
+        self::$connection->beginTransaction();
+    }
+
+    public function commit()
+    {
+        self::$connection->commit();
+    }
+
+    public function rollback()
+    {
+        self::$connection->rollBack();
+    }
 
 
 
