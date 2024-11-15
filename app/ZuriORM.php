@@ -197,6 +197,17 @@ class ZuriORM
 
         return $statement->fetch(PDO::FETCH_OBJ);
     }
+    public function hasMany($relatedClass, $foreignKey = null, $localKey = 'id')
+    {
+        $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
+        $foreignKey = $foreignKey ?? strtolower($this->table) . "_id";
+        $query = "SELECT * FROM {$relatedTable} WHERE $foreignKey = :localKey";
+
+        $statement = self::$connection->prepare($query);
+        $statement->execute([':localKey' => $this->$localKey]);
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
+    }
 
 
 
