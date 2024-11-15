@@ -41,3 +41,20 @@ $results = $db->Where('status', '=', 'active')
 // Aggregate functions
 $totalUsers = $db->table("users")->count();
 $averageAge = $db->table("users")->avg("age");
+
+// one-to-one relationship
+$user = new User();
+$user->id = 1; // User with ID 1
+
+// Fetch the related post (assuming each user has one post)
+$post = $user->hasOne('Post');
+
+// If a post is found, you can access its properties
+if ($post) {
+    echo "Post Title: " . $post->title;
+    echo "Post Content: " . $post->content;
+} else {
+    echo "No post found for this user.";
+}
+
+
