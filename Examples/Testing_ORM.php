@@ -57,4 +57,17 @@ if ($post) {
     echo "No post found for this user.";
 }
 
+// hasMany Relationships
+// Assuming you have an instance of the User model
+$user = new User(1, 'John', 'Jonathan@gmail.com');
+
+// Fetch all posts for this user
+$posts = $user->posts();  // This calls the hasMany method internally
+
+// Output posts
+foreach ($posts as $post) {
+    echo $post->title . "\n";
+    echo $post->content . "\n";
+}
+
 
