@@ -13,7 +13,11 @@ class ZuriORM
     protected array $bindings = [];
     private $selects = '*';
     private $from;
+    private $table;
+    
     private $wheres = [];
+    private $limit = '';
+    private $offset = '';
     private $orderBy = '';
     private $groupBy = '';
     private $joins = '';
@@ -49,6 +53,12 @@ class ZuriORM
     {
         return self::$connection ? "Connected" : "Not connected";
     }
+    public function setTable($table): self
+    {
+        $this->table = $table;
+        return $this;
+    }
+
 
 
     public function create(string $table, array $data): int
@@ -96,6 +106,7 @@ class ZuriORM
         $this->bindings[] = $value;
         return $this;
     }
+
     public function andWhere($column, $operator, $value)
     {
         $this->wheres[] = "AND $column $operator ?";
@@ -190,13 +201,18 @@ class ZuriORM
     {
         $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
         $foreignKey = $foreignKey ?? strtolower($this->table) . "_id";
-        $query = "SELECT * FROM {$relatedTable} WHERE $foreignKey = :localKey LIMIT 1";
 
+        if (!isset($this->$localKey)) {
+            throw new Exception("Local key '$localKey' not found in the current object.");
+        }
+
+        $query = "SELECT * FROM {$relatedTable} WHERE $foreignKey = :localKey LIMIT 1";
         $statement = self::$connection->prepare($query);
         $statement->execute([':localKey' => $this->$localKey]);
 
         return $statement->fetch(PDO::FETCH_OBJ);
     }
+
     public function hasMany($relatedClass, $foreignKey = null, $localKey = 'id')
     {
         $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
