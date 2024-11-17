@@ -231,10 +231,4 @@ class ZuriORM
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
-
-
-
-
-
-
 }
