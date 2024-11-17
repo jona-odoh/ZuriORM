@@ -181,30 +181,25 @@ class ZuriORM
     {
         self::$connection->rollBack();
     }
-    public function hasOne($relatedClass, $foreignKey = null, $localKey = 'id')
+    public function hasOne(string $relatedClass, string $foreignKey = null, string $localKey = 'id')
     {
-        $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
+        $relatedTable = strtolower($relatedClass) . "s";
         $foreignKey = $foreignKey ?? strtolower($this->table) . "_id";
-
         if (!isset($this->$localKey)) {
             throw new Exception("Local key '$localKey' not found in the current object.");
         }
-
         $query = "SELECT * FROM {$relatedTable} WHERE $foreignKey = :localKey LIMIT 1";
         $statement = self::$connection->prepare($query);
         $statement->execute([':localKey' => $this->$localKey]);
-
         return $statement->fetch(PDO::FETCH_OBJ);
     }
-    public function hasMany($relatedClass, $foreignKey = null, $localKey = 'id')
+    public function hasMany(string $relatedClass, string $foreignKey = null, string $localKey = 'id'): array
     {
-        $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
+        $relatedTable = strtolower($relatedClass) . "s";
         $foreignKey = $foreignKey ?? strtolower($this->table) . "_id";
         $query = "SELECT * FROM {$relatedTable} WHERE $foreignKey = :localKey";
-
         $statement = self::$connection->prepare($query);
         $statement->execute([':localKey' => $this->$localKey]);
-
         return $statement->fetchAll(PDO::FETCH_OBJ);
     }
     /**
