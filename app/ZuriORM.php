@@ -179,9 +179,9 @@ class ZuriORM
         if ($this->wheres) {
             $sql .= 'WHERE ' . implode(' ', $this->wheres);
         }
-        $statment = self::$connection->prepare($sql);
-        $statment->execute($this->bindings);
-        return $statment->fetchColumn();
+        $statement = self::$connection->prepare($sql);
+        $statement->execute($this->bindings);
+        return $statement->fetchColumn();
     }
     public function beginTransaction()
     {
