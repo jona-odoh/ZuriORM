@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -12,9 +13,7 @@ class ZuriORM
     private ?PDOStatement $statement = null;
     protected array $bindings = [];
     private $selects = '*';
-    private $from;
     private $table;
-    
     private $wheres = [];
     private $limit = '';
     private $offset = '';
@@ -27,14 +26,12 @@ class ZuriORM
     {
         $this->connect($host, $dbname, $username, $password);
     }
-
     public function connect(
         string $host,
         string $dbname,
         string $username,
         string $password
     ): void
-
     {
         try {
             self::$connection = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -43,12 +40,10 @@ class ZuriORM
             die("Connection failed: " . $e->getMessage());
         }
     }
-
     public function closeConnection(): void
     {
         self::$connection = null;
     }
-
     public function getConnectionStatus(): string
     {
         return self::$connection ? "Connected" : "Not connected";
@@ -58,9 +53,6 @@ class ZuriORM
         $this->table = $table;
         return $this;
     }
-
-
-
     public function create(string $table, array $data): int
     {
         $columns = implode(',', array_keys($data));
@@ -106,7 +98,6 @@ class ZuriORM
         $this->bindings[] = $value;
         return $this;
     }
-
     public function andWhere($column, $operator, $value)
     {
         $this->wheres[] = "AND $column $operator ?";
@@ -144,15 +135,10 @@ class ZuriORM
         $this->joins .= "$type JOIN $table ON $on ";
         return $this;
     }
-
-
     private function buildWhereClause($conditions)
     {
         return $conditions ? "WHERE " . implode(' AND ', array_map(fn($k) => "$k = ?", array_keys($conditions))) : '';
     }
-
-    // On finish work here (Clause)
-
     public function count($column = '*')
     {
         return $this->aggregate("COUNT($column)");
@@ -187,12 +173,10 @@ class ZuriORM
     {
         self::$connection->beginTransaction();
     }
-
     public function commit()
     {
         self::$connection->commit();
     }
-
     public function rollback()
     {
         self::$connection->rollBack();
@@ -212,7 +196,6 @@ class ZuriORM
 
         return $statement->fetch(PDO::FETCH_OBJ);
     }
-
     public function hasMany($relatedClass, $foreignKey = null, $localKey = 'id')
     {
         $relatedTable = strtolower($relatedClass) . "s"; // This line converts the class name of the related entity (e.g., Post) into a lowercase string and appends an "s" to it, assuming the related table is pluralized (e.g., posts). e.g., "Post" -> "posts"
@@ -224,6 +207,37 @@ class ZuriORM
 
         return $statement->fetchAll(PDO::FETCH_OBJ);
     }
+    /**
+     * @throws Exception
+     */
+    public function execute(): array
+    {
+        $sql = "SELECT {$this->selects} FROM {$this->table} {$this->joins}";
+        if ($this->wheres) {
+            $sql .= ' WHERE ' . implode(' AND ', $this->wheres);
+        }
+        if ($this->orderBy) {
+            $sql .= " {$this->orderBy}";
+        }
+        if ($this->groupBy) {
+            $sql .= " {$this->groupBy}";
+        }
+        if ($this->limit) {
+            $sql .= " {$this->limit}";
+        }
+        if ($this->offset) {
+            $sql .= " {$this->offset}";
+        }
+        try {
+            $statement = self::$connection->prepare($sql);
+            $statement->execute($this->bindings);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Database query failed: " . $e->getMessage());
+        }
+    }
+
+
 
 
 
