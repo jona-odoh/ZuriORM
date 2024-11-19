@@ -247,6 +247,16 @@ class ZuriORM
     {
         return $this->where('status', '=', 'active');
     }
+    public function validate(array $data, array $rules): bool
+    {
+        foreach ($rules as $field => $rule) {
+            if (!isset($data[$field]) || !preg_match($rule, $data[$field])) {
+                throw new Exception("Validation failed for $field");
+            }
+        }
+        return true;
+    }
+
 
 
 
