@@ -22,9 +22,10 @@ class ZuriORM
     private $joins = '';
 
 
-    public function __construct($host, $dbname, $username, $password)
+    public function __construct()
     {
-        $this->connect($host, $dbname, $username, $password);
+        $config = require 'config/database.php';
+        $this->connect($config['host'], $config['dbname'], $config['username'], $config['password']);
     }
     public function connect(
         string $host,
