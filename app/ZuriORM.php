@@ -237,5 +237,12 @@ class ZuriORM
         $data = ['deleted_at' => date('Y-m-d H:i:s')];
         return $this->update($table, $data, $conditions);
     }
+    public function paginate($perPage, $currentPage)
+    {
+        $offset = ($currentPage - 1) * $perPage;
+        $this->limit($perPage)->offset($offset);
+        return $this->execute();
+    }
+
 
 }
