@@ -232,4 +232,10 @@ class ZuriORM
             throw new Exception("Database query failed: " . $e->getMessage());
         }
     }
+    public function softDelete($table, $conditions)
+    {
+        $data = ['deleted_at' => date('Y-m-d H:i:s')];
+        return $this->update($table, $data, $conditions);
+    }
+
 }
