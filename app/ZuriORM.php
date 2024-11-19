@@ -243,6 +243,11 @@ class ZuriORM
         $this->limit($perPage)->offset($offset);
         return $this->execute();
     }
+    public function scopeActive()
+    {
+        return $this->where('status', '=', 'active');
+    }
+
 
 
 }
