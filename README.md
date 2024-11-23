@@ -203,9 +203,5 @@ This project is open-source and licensed under the [MIT License](LICENSE).
 
 ---
 
-## **Acknowledgments**
-ZuriORM is inspired by popular PHP frameworks like Laravel. Special thanks to all contributors and testers.
-
----
 
 For questions or support, feel free to [open an issue](https://github.com/jona-odoh/zuriorm/issues).
